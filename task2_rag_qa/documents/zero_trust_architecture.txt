@@ -1,0 +1,33 @@
+Zero Trust Architecture for Enterprise AI Systems
+
+Zero Trust is a security model built on the principle "never trust, always
+verify." Unlike traditional perimeter-based security, which assumes anything
+inside the corporate network is safe, Zero Trust requires every request --
+whether it originates inside or outside the network -- to be authenticated,
+authorized, and continuously validated before access is granted.
+
+The core pillars of a Zero Trust architecture are identity, device,
+network, application, and data. Identity verification typically relies on
+multi-factor authentication and short-lived tokens rather than static
+passwords. Device posture checks confirm that an endpoint meets security
+baselines, such as having disk encryption and up-to-date patches, before it
+is allowed to connect. Micro-segmentation divides the network into small
+zones so that even if an attacker breaches one segment, lateral movement to
+other segments is blocked.
+
+Zero Trust is increasingly applied to AI agent systems, especially those
+using Retrieval-Augmented Generation (RAG) pipelines connected to enterprise
+data. A zero-trust middleware gateway sitting between an AI agent and backend
+data sources can enforce policy checks on every retrieval call -- verifying
+that the agent's identity and the requesting user's permissions both allow
+access to the specific documents being retrieved. This prevents a compromised
+or manipulated agent from exfiltrating sensitive data it was never authorized
+to see, and it mitigates prompt-injection attacks that attempt to trick an
+agent into retrieving or leaking restricted information.
+
+Policy Enforcement Points (PEPs) and Policy Decision Points (PDPs) are the
+two core components of most Zero Trust implementations. The PEP intercepts
+every request, while the PDP evaluates the request against defined policies
+and returns an allow or deny decision. Logging every PEP/PDP decision also
+feeds directly into SIEM platforms, giving SOC teams visibility into access
+patterns across the AI system.

@@ -1,0 +1,57 @@
+The Rise of Zero Trust Middleware for Enterprise AI Agents
+
+Enterprise adoption of large language model (LLM) agents has accelerated
+rapidly over the past two years, with organizations connecting agents
+directly to internal knowledge bases, ticketing systems, and databases
+through Retrieval-Augmented Generation (RAG) pipelines. While this
+unlocks significant productivity gains, it also introduces a new and
+under-appreciated attack surface. An LLM agent that can retrieve
+documents on behalf of a user effectively becomes a new identity within
+the enterprise, one that traditional perimeter security was never
+designed to govern.
+
+Prompt injection is the most cited risk in this space. A malicious
+instruction embedded inside a retrieved document -- for example, hidden
+text in a PDF or a comment in a code repository -- can hijack an agent's
+behavior, instructing it to exfiltrate sensitive data, escalate its own
+permissions, or take actions the original user never requested. Because
+the agent often has broader data access than any single human user would
+be granted, a successful injection can have an outsized blast radius.
+
+Zero Trust principles offer a promising mitigation path. Instead of
+granting an agent standing access to an entire document store, a
+zero-trust middleware gateway can sit between the agent and backend data
+sources, evaluating every single retrieval call against fine-grained
+policy. Each request is checked against both the identity of the agent
+and the identity of the human user on whose behalf it is acting, a
+pattern sometimes called "on-behalf-of" authorization. If a policy check
+fails, the retrieval is blocked and logged, rather than silently allowed.
+
+Researchers building such gateways typically combine several components.
+An authentication layer issues short-lived, scoped tokens to each agent
+session rather than long-lived API keys. A policy decision engine,
+often implemented using attribute-based access control (ABAC), evaluates
+document sensitivity labels against the requesting user's clearance in
+real time. A monitoring layer streams every access decision into a SIEM
+platform, giving security operations teams the same visibility into agent
+behavior that they already have into human user behavior.
+
+Early implementations show meaningful reductions in successful
+data-exfiltration attempts during red-team testing, though they come with
+trade-offs. Fine-grained policy checks add latency to every retrieval
+call, which can be noticeable in interactive chat applications. Policy
+authoring is also non-trivial: overly permissive policies fail to
+mitigate the underlying risk, while overly restrictive policies degrade
+the agent's usefulness by blocking legitimate retrievals. Several teams
+report that iterative policy tuning, informed by SOC feedback on false
+positives and false negatives, is necessary before a gateway reaches
+production-grade reliability.
+
+Looking forward, standardization efforts are underway to define common
+schemas for describing agent identity, document sensitivity, and access
+decisions, which would let organizations mix and match gateway
+components from different vendors rather than building bespoke
+integrations. Until such standards mature, most zero-trust middleware
+deployments remain custom-built, tightly coupled to the specific RAG
+architecture and data classification scheme of the organization that
+built them.

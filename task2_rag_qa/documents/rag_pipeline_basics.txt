@@ -1,0 +1,33 @@
+Retrieval-Augmented Generation (RAG) Pipeline Basics
+
+A RAG pipeline combines a retrieval system with a large language model so
+that the model's answers are grounded in specific documents rather than
+relying purely on what it memorized during training. The pipeline has three
+main stages: indexing, retrieval, and generation.
+
+During indexing, source documents are split into smaller chunks -- typically
+a few hundred words each, sometimes with overlap between consecutive chunks
+so context is not lost at chunk boundaries. Each chunk is converted into a
+numerical vector using an embedding model. These vectors are stored in a
+vector database or a simple in-memory index, alongside metadata such as the
+source document name and chunk position.
+
+During retrieval, the user's question is converted into a vector using the
+same embedding model. The system then compares the question vector against
+all stored chunk vectors using a similarity metric, most commonly cosine
+similarity, and returns the top-k most similar chunks. Choosing the right
+value of k is a trade-off: too small and relevant context may be missed, too
+large and irrelevant text dilutes the prompt and increases cost.
+
+During generation, the retrieved chunks are inserted into a prompt alongside
+the original question, and the language model is instructed to answer using
+only that retrieved context. This grounding significantly reduces
+hallucination compared to asking the model the question directly, and it
+allows the system to cite which source document supported each answer.
+
+Common failure modes in RAG systems include poor chunking (splitting text in
+the middle of an important sentence), embedding models that do not capture
+domain-specific terminology well, and retrieval returning chunks that are
+topically similar but do not actually answer the question. Evaluating a RAG
+system typically involves measuring retrieval precision/recall separately
+from the quality of the final generated answer.
