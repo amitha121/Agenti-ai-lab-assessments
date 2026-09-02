@@ -1,0 +1,20 @@
+2026-08-30 02:14:11 sshd[8821]: Failed password for root from 185.220.101.47 port 51422 ssh2
+2026-08-30 02:14:13 sshd[8821]: Failed password for root from 185.220.101.47 port 51430 ssh2
+2026-08-30 02:14:16 sshd[8821]: Failed password for root from 185.220.101.47 port 51441 ssh2
+2026-08-30 02:14:19 sshd[8821]: Failed password for root from 185.220.101.47 port 51452 ssh2
+2026-08-30 02:14:22 sshd[8821]: Failed password for root from 185.220.101.47 port 51460 ssh2
+2026-08-30 08:02:45 firewall: ALLOW TCP 10.0.1.15:443 -> 10.0.1.100:443 (normal HTTPS traffic)
+2026-08-30 09:11:02 EDR-Agent: File quarantined on HOST-FIN-07: invoice_update.exe (SHA256 matches known Emotet loader signature)
+2026-08-30 09:11:05 EDR-Agent: Process tree: outlook.exe -> invoice_update.exe -> powershell.exe -e <base64 encoded command>
+2026-08-30 10:22:30 firewall: DENY TCP 10.0.2.31:445 -> 192.168.5.12:445 (blocked by policy, internal SMB scan attempt)
+2026-08-30 10:22:31 firewall: DENY TCP 10.0.2.31:445 -> 192.168.5.13:445 (blocked by policy, internal SMB scan attempt)
+2026-08-30 10:22:32 firewall: DENY TCP 10.0.2.31:445 -> 192.168.5.14:445 (blocked by policy, internal SMB scan attempt)
+2026-08-30 10:22:33 firewall: DENY TCP 10.0.2.31:445 -> 192.168.5.15:445 (blocked by policy, internal SMB scan attempt)
+2026-08-30 11:45:09 auth: Successful login for user jsmith from 203.0.113.55 (new device, no prior login history from this IP)
+2026-08-30 11:46:02 auth: Password changed for user jsmith
+2026-08-30 11:46:40 auth: MFA method removed for user jsmith
+2026-08-30 12:03:18 DLP: Outbound email from jsmith@company.com to external address contains attachment matching pattern "customer_database_export.csv" (14,200 rows detected)
+2026-08-30 13:00:00 firewall: ALLOW TCP 10.0.1.20:80 -> 10.0.1.101:80 (normal internal traffic)
+2026-08-30 14:12:55 WAF: SQL injection pattern detected in request to /login.php: username=admin' OR '1'='1
+2026-08-30 14:12:58 WAF: SQL injection pattern detected in request to /login.php: username=admin'-- 
+2026-08-30 15:30:00 IDS: Port scan detected from 45.155.204.10 targeting 40 sequential ports on host WEB-PROD-03

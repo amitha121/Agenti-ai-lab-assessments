@@ -2,3 +2,5 @@ openai>=1.30.0
 sentence-transformers>=2.7.0
 numpy>=1.26.0
 python-dotenv>=1.0.0
+pypdf>=4.2.0
+ddgs>=5.0.0
