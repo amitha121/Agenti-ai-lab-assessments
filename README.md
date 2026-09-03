@@ -1,144 +1,74 @@
-# Agentic AI Workflows
+# Applied Agentic AI (LLM & RAG) — Assignment Files
 
-Eight independent, runnable Python projects across two assignments.
+All 7 programs use **Ollama** — a free, local LLM runner. No API key, no
+billing, no signup required.
 
-| Folder | Task | What it demonstrates |
-|---|---|---|
-| `task1_text_to_sql/` | Text-to-SQL Workflow | Schema retrieval → SQL generation → safe execution |
-| `task2_rag_qa/` | RAG-Based QA System | Indexing → retrieval → grounded generation |
-| `task3_prompt_chaining/` | Prompt Chaining for Summarization | Map → Reduce → Critique → Refine, chained LLM calls |
-| `task4_sql_agent/` | SQL Agent with Tool Use | ReAct loop: Thought → Action (tool call) → Observation, repeated |
-| `task5_pdf_qa_agent/` | PDF/Document QA Agent | Extract PDF text → chunk/embed → retrieve → cited answers |
-| `task6_research_agent/` | Research Agent | Web search → per-source summarize → structured report + references |
-| `task7_security_log_agent/` | Security Log/Alert Analyzer | Heuristic triage → LLM incident classification → severity + mitigation |
-| `task8_multi_agent_system/` | Multi-Agent Collaboration | Research Agent → Analyst Agent → Report Agent, sequential handoff |
+| File | Task |
+|---|---|
+| `1_llm_workflow.py` | Basic LLM chat (accepts input, returns LLM response) |
+| `2_prompt_chaining.py` | Multi-step chain: summary → key points → 3 questions |
+| `3_agentic_ai.py` | Simple agent: plans steps, executes each, shows final output |
+| `4_rag_qa.py` | RAG: answers questions from a PDF/TXT you provide |
+| `5_multi_agent_sdr.py` | Multi-agent SDR system: lead gen → qualification → emailing |
+| `6_policy_compliance_agent.py` | Policy compliance agent: rule engine + synthetic data + LLM explanations |
+| `7_deep_research_agent.py` | Deep research agent: plan → research → draft → reflect → revise |
+| `design_document.md` | Architecture explanation for Tasks 5, 6, and 7 |
 
-All tasks use **one free LLM API key (Groq)** for generation. Retrieval-based
-tasks (1, 2, 4, 5) also use a **free local embedding model**
-(`sentence-transformers`, no key needed). Tasks 6 and 8 use **DuckDuckGo
-search** (`ddgs` package), which is also free and needs no API key.
+## 1. Setup (do this once)
 
----
+1. **Install Ollama** (free): https://ollama.com — download the installer
+   for Windows/Mac/Linux and run it.
+2. **Pull a model** (one-time, ~2GB download):
+   ```
+   ollama pull llama3.2
+   ```
+3. **Install Python packages:**
+   ```
+   pip install -r requirements.txt
+   ```
 
-## 1. Get your free API key (~1 minute)
+That's it — no API key, no billing information needed anywhere.
 
-1. Go to **https://console.groq.com**
-2. Sign up / log in (Google or GitHub — no credit card)
-3. Left sidebar → **API Keys** → **Create API Key**
-4. Copy the key (starts with `gsk_...`)
+> **Ollama must be running** in the background when you run the scripts.
+> Installing it usually starts it automatically; if a script can't connect,
+> just open the Ollama app once or run `ollama serve` in a terminal.
 
-## 2. Set up the project
-
-```bash
-cd agentic_ai_workflows
-pip install -r requirements.txt
-
-copy .env.example .env        # Windows
-# or: cp .env.example .env    # Mac/Linux
-
-# then open .env and paste your key in place of "your_key_here"
-```
-
-> **Embedding model note:** the first time you run task 1, 2, 4, or 5,
-> `sentence-transformers` auto-downloads a small (~90MB) model from Hugging
-> Face. Needs internet once, then it's cached and works offline.
-
-## 3. Run each task
+## 2. Running each script
 
 ```bash
-cd task1_text_to_sql        && python text_to_sql.py
-cd ../task2_rag_qa          && python rag_qa.py
-cd ../task3_prompt_chaining && python prompt_chaining_summarization.py
-cd ../task4_sql_agent       && python sql_agent.py
-cd ../task5_pdf_qa_agent    && python pdf_qa_agent.py
-cd ../task6_research_agent  && python research_agent.py
-cd ../task7_security_log_agent && python security_log_agent.py
-cd ../task8_multi_agent_system  && python multi_agent_system.py
+python 1_llm_workflow.py
+python 2_prompt_chaining.py
+python 3_agentic_ai.py
+python 4_rag_qa.py path/to/your_document.pdf
+python 5_multi_agent_sdr.py
+python 6_policy_compliance_agent.py
+python 7_deep_research_agent.py
 ```
 
-Each script prints every intermediate step so you can screenshot the
-pipeline in action for your report.
+For Task 4, point it at any PDF or TXT file (a short article, notes file,
+or report works fine as a demo document).
 
----
+## 3. What to say in your submission/demo
 
-## Assignment 2 — how each new agent works
+- **Task 1** — straightforward "send text to the LLM, print the reply" loop.
+- **Task 2** — "prompt chaining": each step's *output* becomes the next
+  step's *input* (summary → key points → questions).
+- **Task 3** — Plan → Execute → Final Output, the core loop behind more
+  advanced agent frameworks like LangChain or CrewAI.
+- **Task 4** — RAG pipeline: Load document → Chunk it → Retrieve the most
+  relevant chunks (TF-IDF similarity) → Feed only those chunks to the LLM
+  so answers are grounded in your document, not guessed.
+- **Tasks 5, 6, 7** — see `design_document.md` for full architecture
+  diagrams and design reasoning for each.
 
-### Task 5 — PDF/Document QA Agent
-Same 3-stage RAG pattern as Task 2, but for PDFs: `pypdf` extracts text
-page-by-page, chunks are embedded locally, and the LLM answers citing
-`(filename, page N)`. A sample PDF — an SOC incident-response playbook —
-ships in `documents/` so it runs out of the box. Drop your own PDFs in and
-delete `pdf_vector_store.pkl` to re-index.
+## 4. Common issues
 
-### Task 6 — Research Agent
-`search_web()` queries DuckDuckGo (no key needed) → each result is
-summarized into one key point by the LLM → all key points are synthesized
-into one structured report (Introduction / Key Findings / Conclusion /
-References) → saved as a `.md` file in `reports/`.
-
-### Task 7 — Security Log/Alert Analyzer
-A two-stage design mirroring real SOC tooling: **Stage 1** is a cheap
-keyword-based heuristic filter (a stand-in for SIEM correlation rules)
-that flags which log lines are worth attention, dropping routine
-ALLOW/normal traffic. **Stage 2** sends only the flagged lines to the LLM,
-which groups related lines into distinct incidents (e.g. 5 repeated failed
-SSH logins from the same IP = one brute-force incident, not five), and for
-each incident returns a threat type, severity (Low/Medium/High/Critical),
-and concrete mitigation steps. A realistic `sample_logs.txt` is included
-(brute-force SSH, malware quarantine, internal SMB scan, credential
-takeover pattern, DLP data-exfiltration signal, SQLi, port scan).
-
-### Task 8 — Multi-Agent Collaboration System
-Three agents with distinct roles and scoped context, run in sequence by an
-orchestrator:
-- **Research Agent** — only gathers raw sources, does no analysis.
-- **Analyst Agent** — only sees the Research Agent's raw sources; extracts
-  3-6 key insights, noting which sources support each and flagging
-  disagreements between sources.
-- **Report Agent** — only sees the Analyst Agent's insights (not the raw
-  sources); writes the final structured, referenced report.
-
-This differs from Task 6 (one agent doing search+summarize+report itself)
-by genuinely separating responsibilities across agents that only see what
-the previous agent handed them — closer to how production multi-agent
-systems scope context per role.
-
----
-
-## Assignment 1 — how tasks 1-4 work
-
-### Task 1 — Text-to-SQL
-Schema-card retrieval (cosine similarity) picks relevant tables, the LLM
-writes SQL using only that schema, a regex guard blocks anything that
-isn't `SELECT`, then it runs against an auto-generated SQLite sample DB.
-
-### Task 2 — RAG QA
-Chunks + embeds 3 sample docs (SOC ops, Zero Trust, RAG basics), retrieves
-top-k by cosine similarity, answers with source citations. Vectors cache
-to disk so re-runs are instant.
-
-### Task 3 — Prompt Chaining for Summarization
-Four chained LLM calls: `chunk summaries → combined draft → critique →
-refined final summary` (map-reduce-critique-refine).
-
-### Task 4 — SQL Agent with Tool Use (ReAct)
-Unlike Task 1's one-shot pipeline, this is a real agent loop: the LLM
-doesn't see the schema upfront. It calls `list_tables()`, then
-`get_schema()`, then `run_query()` — reading each result before deciding
-its next move — using native function calling (Groq/OpenAI `tools`
-parameter). A `MAX_STEPS` cap (default 8) prevents infinite loops.
-
----
-
-## Troubleshooting
-
-- **`GROQ_API_KEY not set`**: make sure `.env` exists (not `.env.example`)
-  and has your real key.
-- **`ModuleNotFoundError: ddgs`**: run `pip install ddgs` — this only
-  affects tasks 6 and 8.
-- **Search returns nothing (tasks 6, 8)**: DuckDuckGo occasionally
-  rate-limits automated queries — wait a minute and retry, or try a more
-  specific search topic.
-- **Rate limit errors from Groq**: the free tier has per-minute limits;
-  wait a few seconds and retry, or switch `DEFAULT_MODEL` in
-  `shared/llm_client.py` to `"llama-3.1-8b-instant"`.
+- `ConnectionError` / can't connect to Ollama → make sure Ollama is
+  installed and running (open the app, or run `ollama serve`).
+- Model not found → run `ollama pull llama3.2` again.
+- `ModuleNotFoundError` → run `pip install -r requirements.txt` again.
+- PDF extraction returns empty text (Task 4) → the PDF might be a scanned
+  image rather than real text; try a text-based PDF or a `.txt` file.
+- Ollama responses are slower than a cloud API — this is normal since the
+  model runs on your own CPU/GPU. Use a smaller model (e.g. `llama3.2:1b`)
+  for faster (but less capable) responses if needed.
